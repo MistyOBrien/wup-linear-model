@@ -27,10 +27,11 @@ data <- read.csv(file="https://onlinestatbook.com/case_studies_rvls/physical_str
 
 ```
 
+## Model 1
 ```{r}
 basicNN <- ggplot(data,aes(y=SIMS,x=ARM))
 ```
-##Now add in scatterplot
+## Now add in scatterplot
 
 ```{r}
 basicNN + geom_point()
@@ -49,6 +50,13 @@ cor(SIMS~ARM,data=data)
 model.1 <- lm(SIMS~ARM,data=data)
 summary.lm(model.1)
 ```
+
+```{r}
+newdata=data.frame(GRIP=94,ARM=88)
+predict(model.1,newdata,interval="prediction")
+```
+
+
 # now add the model fit to our plot
   
 
@@ -57,13 +65,13 @@ basicNN + geom_point() + geom_smooth(method=lm)
 ```
 
 The equation of SIMS is explained by ARM is
-SIMS=-4.1+ 0.0545(ARM)
+SIMS=-4.1+ 0.0545* ARM
 
-
+## Model 2
 ```{r}
 basicBB <- ggplot(data,aes(y=SIMS,x=GRIP))
 ```
-##Now add in scatterplot
+## Now add in scatterplot
 
 ```{r}
 basicNN + geom_point()
@@ -81,7 +89,10 @@ cor(SIMS~GRIP,data=data)
 ```{r}
 model.2 <- lm(SIMS~GRIP,data=data)
 summary.lm(model.2)
+predict(model.2,newdata,interval="prediction")
 ```
+
+
 # now add the model fit to our plot
   
 
@@ -90,6 +101,24 @@ basicBB + geom_point() + geom_smooth(method=lm)
 ```
 
 The equation of SIMS is explained by GRIP is
-SIMS=-4.1+ 0.045(GRIP)
+SIMS=-4.1+ 0.045* GRIP
 
 
+## Model 3
+
+  
+# Inferential  (Build linear model)
+  
+```{r}
+model.3 <- lm(SIMS~ARM+GRIP,data=data)
+summary.lm(model.3)
+predict(model.3,newdata,interval="prediction")
+```
+
+The equation of SIMS is explained by ARM is
+SIMS=-5.43+0.037* ARM + 0.024* GRIP
+
+```{r}
+anova(model.1,model.3)
+```
+We found that the p=0.0000049 due to the p-value being so low we reject the null hypothesis and conclude that the best model for predicting SIMS is model 3
