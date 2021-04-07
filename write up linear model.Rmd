@@ -27,7 +27,7 @@ data <- read.csv(file="https://onlinestatbook.com/case_studies_rvls/physical_str
 
 ```
 
-## Model 1
+## Model 1 SIM~ARMS
 ```{r}
 basicNN <- ggplot(data,aes(y=SIMS,x=ARM))
 ```
@@ -50,6 +50,7 @@ cor(SIMS~ARM,data=data)
 model.1 <- lm(SIMS~ARM,data=data)
 summary.lm(model.1)
 ```
+The model shows that r-squared is 0.4706 and shows that the residual standard error is 1.226
 
 ```{r}
 newdata=data.frame(GRIP=94,ARM=88)
@@ -67,7 +68,7 @@ basicNN + geom_point() + geom_smooth(method=lm)
 The equation of SIMS is explained by ARM is
 SIMS=-4.1+ 0.0545* ARM
 
-## Model 2
+## Model 2 SIM~GRIP
 ```{r}
 basicBB <- ggplot(data,aes(y=SIMS,x=GRIP))
 ```
@@ -102,10 +103,16 @@ basicBB + geom_point() + geom_smooth(method=lm)
 
 The equation of SIMS is explained by GRIP is
 SIMS=-4.1+ 0.045* GRIP
+The model shows that r-squared is 0.4094 and shows that the residual standard error is 1.295
 
 
-## Model 3
+## Model 3 SIM~ARM+GRIP
 
+# Numerical results
+
+```{r}
+cor(SIMS~ARM+GRIP,data=data)
+```
   
 # Inferential  (Build linear model)
   
@@ -117,8 +124,12 @@ predict(model.3,newdata,interval="prediction")
 
 The equation of SIMS is explained by ARM is
 SIMS=-5.43+0.037* ARM + 0.024* GRIP
-
+The model shows that r-squared is 0.5422 and shows that the residual standard error is 1.144. The model is better then the last two due to the residual standard error is lower and the r-squared is higher than the others.
+## ANOVA Test
 ```{r}
 anova(model.1,model.3)
 ```
-We found that the p=0.0000049 due to the p-value being so low we reject the null hypothesis and conclude that the best model for predicting SIMS is model 3
+We found that the p=0.0000049 due to the p-value being so low we reject the null hypothesis and conclude that the best model for predicting SIMS is model 3. 
+## Conclusion
+
+From the data found we see the r-square of model 1 is 0.4706, model 2 is 0.4094 and model 3 is 0.5422, this shows thats model 3 is the better model. From the anvoa test p-value is 0.0000049 we reject the null hypothesis. 
